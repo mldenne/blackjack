@@ -2,7 +2,7 @@ require_relative 'deck'
 
 class Blackjack
 
-  attr_accessor :dealer, :player, :deck, :serve
+  attr_accessor :dealer, :player, :deck
 
   def initialize
     @dealer = []
@@ -17,7 +17,7 @@ class Blackjack
   end
 
   def intro
-    puts "Let's play Blackjack"
+    puts "\n*** Let's play Blackjack! ***"
     # enter in code for rules...Players attempt to beat the dealer by getting a count as close to 21 as possible, without going over 21.
   end
 
@@ -36,9 +36,9 @@ class Blackjack
 
   def player_action
     initial_deal
-    puts "Dealer shows #{dealer.first.face} of #{dealer.first.suit}"
+    puts "\nDealer shows #{dealer.first.face} of #{dealer.first.suit}"
     puts "You are holding:"
-    player.each {|card| puts "#{card.face} of #{card.suit}"}
+    player.each {|card| puts "   #{card.face} of #{card.suit}"}
     player_total
   end
 
@@ -63,17 +63,17 @@ class Blackjack
   end
 
   def player_hit
-    puts "Dealer shows #{dealer.first.face} of #{dealer.first.suit}"
+    puts "\nDealer shows #{dealer.first.face} of #{dealer.first.suit}"
     puts "You are NOW holding:"
     @player << deck.deal
-    player.each {|card| puts "#{card.face} of #{card.suit}"}
+    player.each {|card| puts "   #{card.face} of #{card.suit}"}
     player_total
   end
 
   def dealer_action
+    dealer_first_total = dealer.inject(0){|sum, card| sum += card.value}
     puts "Dealer's cards are:"
-    dealer.each {|card| puts "#{card.face} of #{card.suit}"}
-    puts "Dealers total is #{dealer_total}"
+    dealer.each {|card| puts "   #{card.face} of #{card.suit}"}
     dealer_total
   end
 
@@ -83,12 +83,16 @@ class Blackjack
     puts "Dealer's total is #{dealer_total}"
     if dealer_total == 21 && dealer.length == 2 && dealer_total > player_total
       puts "Blackjack, dealer wins"
-    elsif dealer_total >= 16 && dealer_total == player_total
+    elsif dealer_total <= 21 && dealer_total > player_total
+      puts "Dealer wins"
+    elsif dealer_total >= 16 && dealer_total < 21 && dealer_total == player_total
       puts "Tie - YOU win!"
-    elsif dealer_total < 21 && dealer_total > 16 && dealer_total > player_total
-      puts "Dealer Wins"
+    elsif dealer_total >= 16 && dealer_total < 21 && dealer_total > player_total
+      puts "Dealer wins"
+    elsif dealer_total >= 16 && dealer_total < 21 && dealer_total < player_total
+      puts "You beat dealer - YOU win!"
     elsif dealer_total < 16 && dealer_total > player_total
-      puts "Dealer Wins"
+      puts "Dealer wins"
     elsif dealer_total < 16 && dealer_total < player_total
       dealer_hit
     else
@@ -99,26 +103,27 @@ class Blackjack
   def dealer_hit
     puts "Dealer takes another card..."
     @dealer << deck.deal
-    dealer.each {|card| puts "#{card.face} of #{card.suit}"}
-    dealer_total = dealer.inject(0){|sum, card| sum += card.value}
-    player_total = player.inject(0){|sum, card| sum += card.value}
-    puts "Dealers total is #{dealer_total}"
-    if dealer_total < 21 && dealer.length > 2 && dealer_total > player_total
-      puts "Dealer wins"
-    elsif dealer_total == 21 && dealer_total == player_total || dealer_total >= 16 && dealer_total == player_total
-      puts "Tie - YOU win!"
-    elsif dealer_total < 16 && dealer_total < player_total
-      dealer_hit
-    elsif dealer_total >= 16 && dealer_total < 21 && dealer_total < player_total
-      puts "Player beats Dealer - YOU win!"
-    else
-      puts "Dealer Busts - YOU win!"
-    end
+    dealer.each {|card| puts "   #{card.face} of #{card.suit}"}
+    dealer_total
+    # dealer_total = dealer.inject(0){|sum, card| sum += card.value}
+    # player_total = player.inject(0){|sum, card| sum += card.value}
+    # puts "Dealers total is #{dealer_total}"
+    # if dealer_total < 21 && dealer.length > 2 && dealer_total > player_total
+    #   puts "Dealer wins"
+    # elsif dealer_total == 21 && dealer_total == player_total || dealer_total >= 16 && dealer_total == player_total
+    #   puts "Tie - YOU win!"
+    # elsif dealer_total < 16 && dealer_total < player_total
+    #   dealer_hit
+    # elsif dealer_total >= 16 && dealer_total < 21 && dealer_total < player_total
+    #   puts "Player beats Dealer - YOU win!"
+    # else
+    #   puts "Dealer Busts - YOU win!"
+    # end
   end
 
   def blackjack
     puts "Dealer's cards are:"
-    dealer.each {|card| puts "#{card.face} of #{card.suit}"}
+    dealer.each {|card| puts "   #{card.face} of #{card.suit}"}
     player_total = player.inject(0){|sum, card| sum += card.value}
     dealer_total = dealer.inject(0){|sum, card| sum += card.value}
     puts "Dealer's total is #{dealer_total}"
@@ -132,12 +137,14 @@ class Blackjack
   def reached_max
     puts "You reached 21!"
     puts "Dealer's cards are:"
-    dealer.each {|card| puts "#{card.face} of #{card.suit}"}
+    dealer.each {|card| puts "   #{card.face} of #{card.suit}"}
     player_total = player.inject(0){|sum, card| sum += card.value}
     dealer_total = dealer.inject(0){|sum, card| sum += card.value}
     if dealer_total == player_total
       puts "Tie - YOU win!"
-    else dealer_total < 16 && dealer_total < player_total
+    elsif dealer_total > player_total
+      puts "Dealer Busts - YOU win!"
+    else
       dealer_hit
     end
   end
@@ -150,9 +157,8 @@ class Blackjack
       Blackjack.new.play
     else
       puts "Thanks for playing!"
+    end
   end
-
-end
 end
 
 
