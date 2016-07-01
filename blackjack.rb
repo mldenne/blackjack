@@ -50,7 +50,7 @@ class Blackjack
       elsif player_total == 21 && player.length > 2
         reached_max
       elsif player_total > 21
-        puts "You bust!"
+        puts "BUST!"
       else
         puts "Hit or Stay (h/s)?"
         response = gets.chomp.downcase
@@ -98,12 +98,18 @@ class Blackjack
     dealer_total = dealer.inject(0){|sum, card| sum += card.value}
     player_total = player.inject(0){|sum, card| sum += card.value}
     puts "Dealers total is #{dealer_total}"
-    if dealer_total <= 21 && dealer_total > player_total
+    if dealer_total < 21 && dealer_total > player_total
       puts "Dealer wins"
-    elsif dealer_total <= 16 && dealer_total < player_total
+    elsif dealer_total == 21 && dealer_total == player_total || dealer_total == player_total
+      puts "Tie - YOU win!"
+    elsif dealer_total < 16 && dealer_total < player_total
       dealer_hit
+    elsif dealer_total <= 16 && dealer_total < player_total
+      puts "YOU win!"
+    elsif dealer_total > 21
+      puts "Dealer busts - YOU win!"
     else
-      "Dealer busts - YOU win!"
+      puts "YOU win!"
     end
   end
 
@@ -119,7 +125,6 @@ class Blackjack
     else
       puts "Blackjack - you win!"
     end
-    outro
   end
 
   def reached_max
@@ -129,16 +134,10 @@ class Blackjack
     player_total = player.inject(0){|sum, card| sum += card.value}
     dealer_total = dealer.inject(0){|sum, card| sum += card.value}
     if dealer_total == player_total
-      puts "Tie - player wins!"
-    elsif dealer_total < player_total
+      puts "Tie - YOU win!"
+    else dealer_total < 16 && dealer_total < player_total
       dealer_hit
-    else
-      puts
     end
-    outro
-  end
-
-  def bust
   end
 
   def outro
