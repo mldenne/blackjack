@@ -14,7 +14,7 @@ class Deck
     @cards.shuffle!
   end
 
-  def deal # Dealer deals from the deck
+  def deal
     cards.shift
   end
 
