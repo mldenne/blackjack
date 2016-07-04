@@ -21,8 +21,8 @@ class Blackjack
     puts "Select Y for yes or N for no and hit <Enter>."
     response = gets.chomp.downcase
       if response == "y"
-        puts "In this version of Blackjack, the player attempts to beat the dealer by getting a count as close to 21 as possible, without going over 21. In round robin fashion, the dealer deals one round of cards face up and a second round of cards face up to the player and face down to the dealer. Based on the face up card of the dealer and the total of the player's cards, the players determines whether or not to have the dealer deal more cards to increase the total. Aces are worth 11 points, face cards are worth 10, and all other cards are pip value. If the total of the player's cards equals 21, this is a natural Blackjack and no more cards are dealt. If the total is less than 21, the player may 'hit', which means the dealer deal another card, or 'stay', which means the player keeps the cards. The object is to increase the total of the cards to 21 or as close to 21 as possible. If the total of the cards is over 21, the player 'Busts' and loses the game. Once cards are no longer added to the player's hand, the dealer reveals the face down card. Cards are added to the dealer's hand if the dealer's total is less than 16. The game is over when the dealer's cards total 21, there is a tie, the dealer's totals beats the player's total, or the dealer 'busts'. All ties go to the player."
-        puts "\nNow to play Blackjack..."
+        puts "In this version of Blackjack, the player attempts to beat the dealer by getting the card count as close to 21 as possible, without going over 21. In round robin fashion, the dealer deals one round of cards face up and a second round of cards face up to the player and face down to the dealer. Based on the up card of the dealer and the total of the player's cards, the player determines whether or not to request more cards to increase the total. Aces are worth 11 points, face cards are worth 10, and all other cards are pip value. If the total of the player's cards equals 21, this is a natural Blackjack and no more cards are dealt. If the total is less than 21, the player may 'hit' and request another card, or 'stay' and keep the cards. The object is to increase the total of the cards to 21 or as close to 21 as possible. If the total of the cards is over 21, the player 'Busts' and loses the game. Once cards are no longer added to the player's hand, the dealer reveals the face down card and adds to the dealer's hand if the dealer's total is less than 16. At this point the game is over when the dealer's cards total 21, there is a tie, the dealer's total beats the player's total, or the dealer 'busts'. All ties go to the player."
+        puts "\nNow let's play Blackjack..."
         player_action
       elsif response != "y" && response != "n"
         puts "I do not understand your request."
@@ -30,13 +30,15 @@ class Blackjack
         puts "\nSo...would you like to read the rules of the game?"
         response = gets.chomp.downcase
         if response == "y"
-          puts "In this version of Blackjack, the player attempts to beat the dealer by getting a count as close to 21 as possible, without going over 21. In round robin fashion, the dealer deals one round of cards face up and a second round of cards face up to the player and face down to the dealer. Based on the face up card of the dealer and the total of the player's cards, the players determines whether or not to have the dealer deal more cards to increase the total. Aces are worth 11 points, face cards are worth 10, and all other cards are pip value. If the total of the player's cards equals 21, this is a natural Blackjack and no more cards are dealt. If the total is less than 21, the player may 'hit', which means the dealer deal another card, or 'stay', which means the player keeps the cards. The object is to increase the total of the cards to 21 or as close to 21 as possible. If the total of the cards is over 21, the player 'Busts' and loses the game. Once cards are no longer added to the player's hand, the dealer reveals the face down card. Cards are added to the dealer's hand if the dealer's total is less than 16. The game is over when the dealer's cards total 21, there is a tie, the dealer's totals beats the player's total, or the dealer 'busts'. All ties go to the player."
-          puts "\nNow to play Blackjack..."
+          puts "In this version of Blackjack, the player attempts to beat the dealer by getting the card count as close to 21 as possible, without going over 21. In round robin fashion, the dealer deals one round of cards face up and a second round of cards face up to the player and face down to the dealer. Based on the up card of the dealer and the total of the player's cards, the player determines whether or not to request more cards to increase the total. Aces are worth 11 points, face cards are worth 10, and all other cards are pip value. If the total of the player's cards equals 21, this is a natural Blackjack and no more cards are dealt. If the total is less than 21, the player may 'hit' and request another card, or 'stay' and keep the cards. The object is to increase the total of the cards to 21 or as close to 21 as possible. If the total of the cards is over 21, the player 'Busts' and loses the game. Once cards are no longer added to the player's hand, the dealer reveals the face down card and adds to the dealer's hand if the dealer's total is less than 16. At this point the game is over when the dealer's cards total 21, there is a tie, the dealer's total beats the player's total, or the dealer 'busts'. All ties go to the player."
+          puts "\nNow let's play Blackjack..."
           player_action
         else
+          puts "I'll take that as a 'No'. Let's play then!"
           player_action
         end
       else
+        puts "Alright, let's play then!"
         player_action
       end
   end
@@ -64,15 +66,15 @@ class Blackjack
 
   def player_total
     player_total = player.inject(0){|sum, card| sum += card.value}
-    puts "Your total is #{player_total}"
+    puts "Your total is #{player_total}..."
       if player_total == 21 && player.length == 2
         blackjack
       elsif player_total == 21 && player.length > 2
         reached_max
       elsif player_total > 21
-        puts "\n*** BUST! ***"
+        puts "\n   *** BUST! ***"
       else
-        puts "Hit or Stay?"
+        puts "\nDo you want to Hit or Stay?"
         puts "Please select H for Hit or S for Stay and hit <Enter>."
         response = gets.chomp.downcase
         if response == "h"
@@ -80,11 +82,12 @@ class Blackjack
         elsif response != "h" && response != "s"
           puts "I do not understand your selection."
           puts "Please select either H or S and hit <Enter> or the dealer will take over."
-          puts "Hit or Stay?"
+          puts "\nDo you want to Hit or Stay?"
           response = gets.chomp.downcase
           if response == "h"
             player_hit
           else
+            puts "I'll take that as a Stay. Dealer is making the next play..."
             dealer_action
           end
         else
@@ -112,27 +115,26 @@ class Blackjack
     dealer_total = dealer.inject(0){|sum, card| sum += card.value}
     player_total = player.inject(0){|sum, card| sum += card.value}
     puts "Dealer's total is #{dealer_total}"
+    puts "Your total is #{player_total}..."
     if dealer_total == 21 && dealer.length == 2 && dealer_total > player_total
-      puts "\nDealer has Blackjack, dealer wins"
-    elsif dealer_total <= 21 && dealer_total > player_total
-      puts "\nDealer wins"
-    elsif dealer_total >= 16 && dealer_total <= 21 && dealer_total == player_total
-      puts "\nTie - YOU win!"
-    elsif dealer_total >= 16 && dealer_total < 21 && dealer_total > player_total
-      puts "\nDealer wins"
-    elsif dealer_total >= 16 && dealer_total < 21 && dealer_total < player_total
-      puts "\nYou beat the dealer - YOU win!"
+      puts "\n   Dealer has Blackjack, dealer wins"
+    elsif dealer_total >= 16 && dealer_total <= 21 && dealer_total > player_total
+      puts "\n   Dealer wins"
     elsif dealer_total < 16 && dealer_total > player_total
-      puts "\nDealer wins"
-    elsif dealer_total < 16 && dealer_total < player_total
+      puts "\n   Dealer wins"
+    elsif dealer_total >= 16 && dealer_total <= 21 && dealer_total == player_total
+      puts "\n   Tie - YOU win!"
+    elsif dealer_total < 16 && dealer_total <= player_total
       dealer_hit
+    elsif dealer_total >= 16 && dealer_total < 21 && dealer_total < player_total
+      puts "\n   You beat the dealer - YOU win!"
     else
-      puts "\nDealer busts - YOU win!"
+      puts "\n   Dealer Busts - YOU win!"
     end
   end
 
   def dealer_hit
-    puts "\nDealer takes another card..."
+    puts "\nDealer is under 16 and will take another card..."
     @dealer << deck.deal
     dealer.each {|card| puts "   #{card.face} of #{card.suit}"}
     dealer_total
@@ -145,9 +147,9 @@ class Blackjack
     dealer_total = dealer.inject(0){|sum, card| sum += card.value}
     puts "Dealer's total is #{dealer_total}"
     if dealer_total == player_total
-      puts "\nBlackjack Tie - YOU win!"
+      puts "\n   Blackjack Tie - YOU win!"
     else
-      puts "\nBlackjack - YOU win!"
+      puts "\n   Blackjack - YOU win!"
     end
   end
 
@@ -159,16 +161,16 @@ class Blackjack
     dealer_total = dealer.inject(0){|sum, card| sum += card.value}
     puts "Dealer's total is #{dealer_total}"
     if dealer_total == player_total
-      puts "\nTie - YOU win!"
+      puts "\n   Tie - YOU win!"
     elsif dealer_total > player_total
-      puts "\nDealer Busts - YOU win!"
+      puts "\n   Dealer Busts - YOU win!"
     else
       dealer_hit
     end
   end
 
   def outro
-    puts "\n>>> GAME OVER <<<"
+    puts "\n   GAME OVER"
     puts "\nWould you like to play again?"
     puts "Select Y for yes or N for no and hit <Enter>."
     response = gets.chomp.downcase
