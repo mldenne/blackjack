@@ -50,12 +50,6 @@ class Blackjack
     @player << deck.deal
   end
 
-  # def card_totals
-  #   dealer_total = dealer.inject(0){|sum, card| sum += card.value}
-  #   player_total = player.inject(0){|sum, card| sum += card.value}
-  # end
-
-
   def player_action
     initial_deal
     dealer_shows
